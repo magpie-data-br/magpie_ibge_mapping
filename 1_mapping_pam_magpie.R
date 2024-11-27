@@ -105,4 +105,4 @@ summary_soybean <- mapped_grid_data %>%
   summarise(total = sum(value_final, na.rm = TRUE) / 1e6)  # Summarize in millions
 
 ## Save file
-write.table(final_data2,"crop_planted_area_1998_2023.csv", row.names = F, sep = ";")
+write.table(final_data,"crop_planted_area_1998_2023.csv", row.names = F, sep = ";")
