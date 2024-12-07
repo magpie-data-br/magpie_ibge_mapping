@@ -21,6 +21,8 @@
 # - crop_planted_area_1998_2023.csv: Final dataset containing grid IDs, MagPie crop 
 #   categories, years, and adjusted crop values.
 #
+rm(list=ls())
+
 # Load necessary libraries
 library(dplyr)
 
@@ -30,12 +32,12 @@ path <- getwd() # Get the current working directory
 ## Step 1: Load data ------------------------------------------------------
 # Load auxiliary files
 # Mapping between MagPie crops and IBGE crops
-mapping_crops <- readRDS(paste0(path,"/data/mapping_crops2.rds")) %>%  as.data.frame()
+mapping_crops <- readRDS(paste0(path,"/data/mapping_crops.rds")) %>%  as.data.frame()
 # Load grid mapping data
 grid_mapping <- read.csv(paste0(path, "/data/mapping_grid_municipio_adjust.csv"))
 
 # Load IBGE data
-ibge_data <- readRDS(paste0(path, "/example_data/PAM_data_planted_area_1998_to_2023.rds")) %>% as.data.frame()
+ibge_data <- readRDS(paste0(path, "/example_data/PAM_data_harvested_area_1998_to_2023.rds")) %>% as.data.frame()
 
 ## Step 2: Pre-processing IBGE data ---------------------------------------
 # Rename columns for easier interpretation
@@ -48,8 +50,8 @@ colnames(ibge_data) <- c("cd_nivel_terri", "nm_nivel_terri", "cd_unidmedida",
 # Filter and clean the data for analysis
 cleaned_data <- ibge_data %>%
   select(cd_mun, nm_prod, year, cd_year, value) %>%  # Select relevant columns
-    mutate(value = gsub("-", 0, value),           # Substitui "-" por NA
-           value = gsub("\\.\\.\\.", 0, value),   # Substitui "..." por NA
+    mutate(value = gsub("-", 0, value),           # Replace "-" by NA
+           value = gsub("\\.\\.\\.", 0, value),   # Replace "..." by NA
            value = as.numeric(value),
            cd_mun = as.integer(cd_mun),  # Convert municipality codes to integers
            nm_prod = as.character(nm_prod))  # Ensure product names are characters
@@ -91,18 +93,19 @@ mapped_grid_data <- mapped_data %>%
 
 # Select the final output columns
 final_data <- mapped_grid_data %>%
-  select(idsbrazil, year, MagPie_Crops, value_final)
+  select(idsbrazil, year, MagPie_Crops, value_final) %>%
+  group_by(idsbrazil, year, MagPie_Crops) %>%
+  summarise(value_final = sum(value_final, na.rm = TRUE), .groups = "drop")
 
 colnames(final_data) <- c("x.y.iso","t","kcr","value")
 final_data$x.y.iso <- gsub('[\\"]', '', final_data$x.y.iso)
 final_data$x.y.iso <- gsub('[\\"]', '', final_data$x.y.iso)
 
-
 # Summarize results for a specific crop (soybean example)
-summary_soybean <- mapped_grid_data %>%
-  filter(MagPie_Crops == "soybean") %>%
-  group_by(year) %>%
-  summarise(total = sum(value_final, na.rm = TRUE) / 1e6)  # Summarize in millions
+summary_soybean <- final_data %>%
+  filter(t == "soybean") %>%
+  group_by(t) %>%
+  summarise(total = sum(value, na.rm = TRUE) / 1e6)  # Summarize in millions
 
 ## Save file
-write.table(final_data,"crop_planted_area_1998_2023.csv", row.names = F, sep = ";")
+write.table(final_data,"crop_harvested_area_1998_2023.csv", row.names = F, sep = ";")
