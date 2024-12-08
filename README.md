@@ -4,16 +4,21 @@ This repository provides a workflow for mapping agricultural data between MagPie
 
 # Repository Structure
 ```bash
+
 .
-├── data/                         # Directory containing auxiliary data
-│   ├── mapping_crops.rds         # Mapping file between MagPie and IBGE crops
-│   ├── mapping_grid_municipio_adjust.csv  # Grid mapping file
-├── example_data/                 # Directory containing example input data
-│   └── PAM_data_planted_area_1998_to_2023.rds  # IBGE crop data
-├── output/                       # Directory for saving results
-│   └── crop_planted_area_1998_2023.csv        # Final output
-├── script.R                      # Main script for data processing
-└── README.md                     # This README file
+├── data/                         
+│   ├── mapping_crops.rds                  # Mapping file between MagPie and IBGE crops
+│   ├── mapping_grid_municipio_adjust.csv  # Grid-to-municipality mapping file
+├── example_data/                 
+│   └── PAM_data_planted_area_1998_to_2023.rds  # Example IBGE crop data (planted area)
+│   └── PPM_data_livestock_1998_to_2023.rds  # Example IBGE Animal data 
+│   └── PEVS_data_production_1998_to_2023.rds  # Example IBGE forestry data 
+├── output/                       
+│   └── crop_planted_area_1998_2023.csv    # Final output for PAM data
+├── 1_mapping_pam_magpie.R                # Script for processing PAM (Planted Area)
+├── 2_mapping_ppm_magpie.R                # Script for processing PPM (Animal)
+├── 3_mapping_pevs_magpie.R               # Script for processing PEVS (Forestry Extraction and Silviculture)
+└── README.md                             # This README file
 ```
 
 # Prerequisites
