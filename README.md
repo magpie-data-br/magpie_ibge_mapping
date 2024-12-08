@@ -1,6 +1,6 @@
 # MagPie-IBGE Crop Mapping
 
-This repository provides a workflow for mapping agricultural data between MagPie crops and IBGE crops, integrating grid-based spatial data, and processing historical crop data from IBGE.
+This repository provides a comprehensive workflow for integrating agricultural, livestock, and forestry data from IBGE with the MagPie modeling framework.
 
 # Repository Structure
 ```bash
