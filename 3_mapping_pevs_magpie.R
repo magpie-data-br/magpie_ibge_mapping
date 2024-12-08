@@ -44,6 +44,8 @@ if (length(missing_packages) > 0) {
   message("All required packages are already installed.")
 }
 
+library(dplyr)
+
 # Define paths
 path <- getwd() # Get the current working directory
 
