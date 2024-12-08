@@ -23,7 +23,20 @@
 #
 rm(list=ls())
 
-# Load necessary libraries
+# List of required packages
+required_packages <- c("dplyr")
+
+# Identify missing packages
+missing_packages <- setdiff(required_packages, installed.packages()[, "Package"])
+
+# Install missing packages
+if (length(missing_packages) > 0) {
+  message("Installing required packages...")
+  install.packages(missing_packages)
+} else {
+  message("All required packages are already installed.")
+}
+
 library(dplyr)
 
 # Define paths
