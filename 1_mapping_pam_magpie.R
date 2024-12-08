@@ -108,4 +108,4 @@ summary_soybean <- final_data %>%
   summarise(total = sum(value, na.rm = TRUE) / 1e6)  # Summarize in millions
 
 ## Save file
-write.table(final_data,"crop_harvested_area_1998_2023.csv", row.names = F, sep = ";")
+write.table(final_data,,paste0(path, "/output/crop_harvested_area_1998_2023.csv"), row.names = F, sep = ";")
