@@ -1,19 +1,24 @@
 # MagPie-IBGE Crop Mapping
 
-This repository provides a workflow for mapping agricultural data between MagPie crops and IBGE crops, integrating grid-based spatial data, and processing historical crop data from IBGE.
+This repository provides a comprehensive workflow for integrating agricultural, livestock, and forestry data from IBGE with the MagPie modeling framework.
 
 # Repository Structure
 ```bash
+
 .
-├── data/                         # Directory containing auxiliary data
-│   ├── mapping_crops.rds         # Mapping file between MagPie and IBGE crops
-│   ├── mapping_grid_municipio_adjust.csv  # Grid mapping file
-├── example_data/                 # Directory containing example input data
-│   └── PAM_data_planted_area_1998_to_2023.rds  # IBGE crop data
-├── output/                       # Directory for saving results
-│   └── crop_planted_area_1998_2023.csv        # Final output
-├── script.R                      # Main script for data processing
-└── README.md                     # This README file
+├── data/                         
+│   ├── mapping_crops.rds                  # Mapping file between MagPie and IBGE crops
+│   ├── mapping_grid_municipio_adjust.csv  # Grid-to-municipality mapping file
+├── example_data/                 
+│   └── PAM_data_planted_area_1998_to_2023.rds  # Example IBGE crop data (planted area)
+│   └── PPM_data_livestock_1998_to_2023.rds  # Example IBGE Animal data 
+│   └── PEVS_data_production_1998_to_2023.rds  # Example IBGE forestry data 
+├── output/                       
+│   └── crop_planted_area_1998_2023.csv    # Final output for PAM data
+├── 1_mapping_pam_magpie.R                # Script for processing PAM (Planted Area)
+├── 2_mapping_ppm_magpie.R                # Script for processing PPM (Animal)
+├── 3_mapping_pevs_magpie.R               # Script for processing PEVS (Forestry Extraction and Silviculture)
+└── README.md                             # This README file
 ```
 
 # Prerequisites
@@ -23,7 +28,7 @@ This repository provides a workflow for mapping agricultural data between MagPie
 
 Install required packages if they are not already installed:
 ```R
-install.packages("dplyr")
+install.packages(c("dplyr", "tidyr", "readr"))
 ```
 
 # Usage
@@ -34,17 +39,19 @@ cd magpie_ibge_mapping
 ```
 
 # 2. Run the Script
-Open 1_mapping_pam_magpie.R in your R environment, ensure the working directory is set correctly, and execute the script step by step. The script will:
 
-* Load data from the data/ and example_data/ folders.
-* Process and clean the IBGE crop data.
-* Merge data with the MagPie crop mapping and grid mapping.
-* Save the results to the output/ directory.
+Each script focuses on specific data sources and processing steps:
+
+1_mapping_pam_magpie.R: Processes PAM data (Planted Area), performs cleaning, and maps to MagPie crops.
+2_mapping_ppm_magpie.R: Handles PPM data (Animal).
+3_mapping_pevs_magpie.R: Processes PEVS data (Forestry Extraction and Silviculture) for integration with MagPie forestry products.
+
+Open the desired script in your R environment, set the working directory correctly, and execute the script step by step.
 
 # 3. Output
-The final output file contains:
+Each script generates outputs saved to the output/ directory. The outputs include:
 
-* idsbrazil: Spatial grid identifiers
-* year: Year of the data
-* MagPie_Crops: MagPie crop categories
-* value_final: Adjusted crop values
+PAM Data: Crop-planted area mapped to MagPie categories by year and spatial grid.
+PPM Data: Bovine herd mapped to MagPie categories.
+PEVS Data: Forestry and silviculture data integrated with MagPie categories.
+All results are aligned with spatial grid identifiers and prepared for integration with MagPie models.
